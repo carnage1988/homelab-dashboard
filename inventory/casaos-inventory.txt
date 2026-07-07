@@ -1,0 +1,27 @@
+========================================
+ HOMELAB HOST INVENTORY
+========================================
+
+==> Hostname
+casaos
+
+==> Operating System
+Debian GNU/Linux 11 (bullseye)
+
+==> Kernel Version
+5.10.0-25-amd64
+
+==> System Uptime
+up 3 weeks, 6 days, 7 hours, 6 minutes
+
+==> Memory Statistics
+Total: 1.8Gi
+Used: 1.0Gi
+Free: 84Mi
+
+==> Disk Usage
+Filesystem: /dev/mmcblk0p2
+Size:       27G
+Used:       15G
+Available:  11G
+Use%:       60%
