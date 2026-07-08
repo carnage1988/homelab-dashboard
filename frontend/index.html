@@ -9,19 +9,32 @@
 
   <button onclick="loadSystem()">Refresh</button>
 
-  <div id="host-card">
-    <div class="host-header">
-        <h2 id="hostname">Loading...</h2>
-        <span id="status-light" class="status-light"></span>
-        <span id="status-text">Checking...</span>
+<div id="dashboard-grid">
+
+    <div id="host-card">
+        <div class="host-header">
+            <h2 id="hostname">Loading...</h2>
+            <span id="status-light" class="status-light"></span>
+            <span id="status-text">Checking...</span>
+        </div>
+
+        <p>Status: <span id="status">Unknown</span></p>
+        <p>Memory: <span id="memory">Unknown</span></p>
+        <p>Disk: <span id="disk">Unknown</span></p>
+        <p>Uptime: <span id="uptime">Unknown</span></p>
+        <p>OS: <span id="os">Unknown</span></p>
+        <p>Kernel: <span id="kernel">Unknown</span></p>
     </div>
-    <p>Status: <span id="status">Unknown</span></p>
-    <p>Memory: <span id="memory">Unknown</span></p>
-    <p>Disk: <span id="disk">Unknown</span></p>
-    <p>Uptime: <span id="uptime">Unknown</span></p>
-    <p>OS: <span id="os">Unknown</span></p>
-    <p>Kernel: <span id="kernel">Unknown</span></p>
-  </div>
+
+    <div id="apps-card">
+        <h2>Applications</h2>
+
+        <div id="apps-list">
+            <p>Loading apps...</p>
+        </div>
+    </div>
+
+</div>
 
   <script>
     async function loadSystem() {
@@ -46,6 +59,30 @@
         document.getElementById("uptime").textContent = data.uptime;
         document.getElementById("os").textContent = data.os;
         document.getElementById("kernel").textContent = data.kernel;
+        
+        const appsList = document.getElementById("apps-list");
+        appsList.innerHTML = "";
+
+        data.apps.forEach(app => {
+            const row = document.createElement("div");
+            row.className = "app-row";
+
+            const left = document.createElement("span");
+            const dot = document.createElement("span");
+            dot.className = app.status.includes("healthy")
+                ? "app-dot app-healthy"
+                : "app-dot app-running";
+
+            left.appendChild(dot);
+            left.appendChild(document.createTextNode(app.name));
+
+            const right = document.createElement("span");
+            right.textContent = app.status.includes("healthy") ? "HEALTHY" : "RUNNING";
+
+            row.appendChild(left);
+            row.appendChild(right);
+            appsList.appendChild(row);
+        });
 
     } catch (error) {
         statusLight.className = "status-light status-down";
@@ -58,6 +95,7 @@
         document.getElementById("uptime").textContent = "Unknown";
         document.getElementById("os").textContent = "Unknown";
         document.getElementById("kernel").textContent = "Unknown";
+        document.getElementById("apps-list").innerHTML = "<p>Unavailable</p>";
     }
 }
     loadSystem();
