@@ -50,8 +50,18 @@
     } catch (error) {
         statusLight.className = "status-light status-down";
         statusText.textContent = "DOWN";
+
+        document.getElementById("hostname").textContent = "Unavailable";
+        document.getElementById("status").textContent = "Down";
+        document.getElementById("memory").textContent = "Unknown";
+        document.getElementById("disk").textContent = "Unknown";
+        document.getElementById("uptime").textContent = "Unknown";
+        document.getElementById("os").textContent = "Unknown";
+        document.getElementById("kernel").textContent = "Unknown";
     }
 }
     loadSystem();
+
+    setInterval(loadSystem, 30000);
   </script>
 </body>
