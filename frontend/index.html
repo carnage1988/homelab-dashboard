@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Homelab Dashboard</title>
+</head>
+<body>
+  <h1>Homelab Dashboard</h1>
+
+  <button onclick="loadSystem()">Refresh</button>
+
+  <pre id="output">Click refresh to load data...</pre>
+
+  <script>
+    async function loadSystem() {
+      const response = await fetch("http://192.168.1.133:8000/system");
+      const data = await response.json();
+
+      document.getElementById("output").textContent =
+        JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
