@@ -2,22 +2,39 @@
 <html>
 <head>
   <title>Homelab Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Homelab Dashboard</h1>
 
   <button onclick="loadSystem()">Refresh</button>
 
-  <pre id="output">Click refresh to load data...</pre>
+  <div id="host-card">
+    <h2 id="hostname">Loading...</h2>
+    <p>Status: <span id="status">Unknown</span></p>
+    <p>Memory: <span id="memory">Unknown</span></p>
+    <p>Disk: <span id="disk">Unknown</span></p>
+    <p>Uptime: <span id="uptime">Unknown</span></p>
+    <p>OS: <span id="os">Unknown</span></p>
+    <p>Kernel: <span id="kernel">Unknown</span></p>
+  </div>
 
   <script>
     async function loadSystem() {
       const response = await fetch("http://192.168.1.133:8000/system");
       const data = await response.json();
 
-      document.getElementById("output").textContent =
-        JSON.stringify(data, null, 2);
+      document.getElementById("hostname").textContent = data.hostname;
+      document.getElementById("status").textContent = data.health.status;
+      document.getElementById("memory").textContent =
+        data.memory.used + " / " + data.memory.total;
+      document.getElementById("disk").textContent =
+        data.disk.used + " / " + data.disk.size + " (" + data.disk.use_percent + ")";
+      document.getElementById("uptime").textContent = data.uptime;
+      document.getElementById("os").textContent = data.os;
+      document.getElementById("kernel").textContent = data.kernel;
     }
+
+    loadSystem();
   </script>
 </body>
-</html>
