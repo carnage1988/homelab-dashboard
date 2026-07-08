@@ -48,6 +48,9 @@
         if (data.health.status === "ok") {
             statusLight.className = "status-light status-live";
             statusText.textContent = "LIVE";
+        } else {
+            statusLight.className = "status-light status-down";
+            statusText.textContent = "DOWN";
         }
 
         document.getElementById("hostname").textContent = data.hostname;
@@ -69,15 +72,22 @@
 
             const left = document.createElement("span");
             const dot = document.createElement("span");
-            dot.className = app.status.includes("healthy")
-                ? "app-dot app-healthy"
-                : "app-dot app-running";
+
+            const right = document.createElement("span");
+
+            if (app.status.includes("Exited")) {
+                right.textContent = "STOPPED";
+                dot.className = "app-dot app-stopped";
+            } else if (app.status.includes("healthy")) {
+                right.textContent = "HEALTHY";
+                dot.className = "app-dot app-healthy";
+            } else {
+                right.textContent = "RUNNING";
+                dot.className = "app-dot app-running";
+            }
 
             left.appendChild(dot);
             left.appendChild(document.createTextNode(app.name));
-
-            const right = document.createElement("span");
-            right.textContent = app.status.includes("healthy") ? "HEALTHY" : "RUNNING";
 
             row.appendChild(left);
             row.appendChild(right);

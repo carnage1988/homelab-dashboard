@@ -12,7 +12,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 def get_health():
     return {"status": "ok"}
 
@@ -84,7 +83,7 @@ def get_kernel():
 
 def get_apps():
     apps_info = subprocess.run(
-        ["docker", "ps", "--format", "{{.Names}}|{{.Status}}|{{.Image}}"],
+        ["docker", "ps", "-a", "--format", "{{.Names}}|{{.Status}}|{{.Image}}"],
         capture_output=True,
         text=True,
     )
@@ -104,18 +103,16 @@ def get_apps():
 
 @app.get("/system")
 def system():
-        return {
-            "health": get_health(),
-            "hostname": get_hostname(),
-            "memory": get_memory(),
-            "disk": get_disk(),
-            "uptime": get_uptime(),
-            "os": get_os(),
+	return {
+	    "health": get_health(),
+	    "hostname": get_hostname(),
+	    "memory": get_memory(),
+	    "disk": get_disk(),
+	    "uptime": get_uptime(),
+	    "os": get_os(),
             "kernel": get_kernel(),
-            "apps": get_apps()
-        }
-
-
+	    "apps": get_apps()
+	}
 
 
 	

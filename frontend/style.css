@@ -89,3 +89,7 @@ body {
 .app-running {
     background-color: #60a5fa;
 }
+
+.app-stopped {
+    background-color: red;
+}
