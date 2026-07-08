@@ -11,3 +11,23 @@ body {
     width: 400px;
     border-radius: 10px;
 }
+
+.host-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-light {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.status-live {
+    background-color: green;
+}
+
+.status-down {
+    background-color: red;
+}

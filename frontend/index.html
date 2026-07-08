@@ -10,7 +10,11 @@
   <button onclick="loadSystem()">Refresh</button>
 
   <div id="host-card">
-    <h2 id="hostname">Loading...</h2>
+    <div class="host-header">
+        <h2 id="hostname">Loading...</h2>
+        <span id="status-light" class="status-light"></span>
+        <span id="status-text">Checking...</span>
+    </div>
     <p>Status: <span id="status">Unknown</span></p>
     <p>Memory: <span id="memory">Unknown</span></p>
     <p>Disk: <span id="disk">Unknown</span></p>
@@ -21,20 +25,33 @@
 
   <script>
     async function loadSystem() {
-      const response = await fetch("http://192.168.1.133:8000/system");
-      const data = await response.json();
+    const statusLight = document.getElementById("status-light");
+    const statusText = document.getElementById("status-text");
 
-      document.getElementById("hostname").textContent = data.hostname;
-      document.getElementById("status").textContent = data.health.status;
-      document.getElementById("memory").textContent =
-        data.memory.used + " / " + data.memory.total;
-      document.getElementById("disk").textContent =
-        data.disk.used + " / " + data.disk.size + " (" + data.disk.use_percent + ")";
-      document.getElementById("uptime").textContent = data.uptime;
-      document.getElementById("os").textContent = data.os;
-      document.getElementById("kernel").textContent = data.kernel;
+    try {
+        const response = await fetch("http://192.168.1.133:8000/system");
+        const data = await response.json();
+
+        if (data.health.status === "ok") {
+            statusLight.className = "status-light status-live";
+            statusText.textContent = "LIVE";
+        }
+
+        document.getElementById("hostname").textContent = data.hostname;
+        document.getElementById("status").textContent = data.health.status;
+        document.getElementById("memory").textContent =
+            data.memory.used + " / " + data.memory.total;
+        document.getElementById("disk").textContent =
+            data.disk.used + " / " + data.disk.size + " (" + data.disk.use_percent + ")";
+        document.getElementById("uptime").textContent = data.uptime;
+        document.getElementById("os").textContent = data.os;
+        document.getElementById("kernel").textContent = data.kernel;
+
+    } catch (error) {
+        statusLight.className = "status-light status-down";
+        statusText.textContent = "DOWN";
     }
-
+}
     loadSystem();
   </script>
 </body>
