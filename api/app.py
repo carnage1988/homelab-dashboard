@@ -82,17 +82,40 @@ def get_kernel():
     )  
     return kernel_info.stdout.strip()
 
+def get_apps():
+    apps_info = subprocess.run(
+        ["docker", "ps", "--format", "{{.Names}}|{{.Status}}|{{.Image}}"],
+        capture_output=True,
+        text=True,
+    )
+
+    apps = []
+
+    for line in apps_info.stdout.splitlines():
+        name, status, image = line.split("|")
+
+        apps.append({
+            "name": name,
+            "status": status,
+            "image": image
+        })
+
+    return apps
+
 @app.get("/system")
 def system():
-	return {
-	    "health": get_health(),
-	    "hostname": get_hostname(),
-	    "memory": get_memory(),
-	    "disk": get_disk(),
-	    "uptime": get_uptime(),
-	    "os": get_os(),
+        return {
+            "health": get_health(),
+            "hostname": get_hostname(),
+            "memory": get_memory(),
+            "disk": get_disk(),
+            "uptime": get_uptime(),
+            "os": get_os(),
             "kernel": get_kernel(),
-	}
+            "apps": get_apps()
+        }
+
+
 
 
 	
